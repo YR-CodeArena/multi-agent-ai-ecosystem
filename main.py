@@ -33,7 +33,7 @@ class Engine(discord.Client):
                 message_payload.extend(chat_history[-10:])
                 message_payload.append({"role":"user", "content": f"User Message: {user_text}"})
                 response = await ai_client.chat.completions.create(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.1-flash-lite-preview",
                         messages=message_payload,
                         temperature=0.8
                     )
@@ -62,7 +62,7 @@ class Engine(discord.Client):
                 message_payload.extend(chat_history[-10:])
                 message_payload.append({"role":"user", "content": f"User Message: {user_text}"})
                 response = await ai_client.chat.completions.create(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.1-flash-lite-preview",
                         messages=message_payload,
                         temperature=0.8
                     )
