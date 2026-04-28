@@ -21,7 +21,7 @@ nezuko_bio = """Nezuko's original personality as a human was that of a kind and 
 
 class Engine(discord.Client):
     def __init__(self, prefix, bio, name, *args, **kwargs):
-        super().__init__(intents=intents, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.prefix = prefix
         self.bio = bio
         self.bot_name = name
