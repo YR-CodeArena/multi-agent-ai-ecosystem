@@ -62,7 +62,7 @@ class Engine(discord.Client):
                 message_payload.extend(chat_history[-10:])
                 message_payload.append({"role":"user", "content": f"User Message: {user_text}"})
                 response = await ai_client.chat.completions.create(
-                        model="local-model",
+                        model="gemini-2.5-flash",
                         messages=message_payload,
                         temperature=0.8
                     )
