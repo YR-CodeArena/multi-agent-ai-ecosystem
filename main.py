@@ -72,7 +72,7 @@ class Engine(discord.Client):
                 
 
                 await message.channel.send(embed=embed)
-        elif message.content.startswith(self.prefix):
+        elif self.prefix in message.content:
             async with message.channel.typing():
                 user_text = message.content[len(self.prefix):].strip()
                 message_payload = [{"role":"system", "content":f"You are {self.bot_name}. Act exactly like this: {self.bio}. You reply in brief sentences."}]
