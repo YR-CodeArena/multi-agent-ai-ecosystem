@@ -104,10 +104,16 @@ class Engine(discord.Client):
                         full_user_input = user_text
                         if link_context != "":
                             full_user_input += f"\n(Hidden Context for AI: The user shared a link containing this information: {link_context})"
-                    
-                message_payload = [{"role":"system", "content":f"You are {self.bot_name}. Act exactly like this: {self.bio}. You reply in brief sentences."}]
+                            
+                system_instruction = f"You are {self.bot_name}. Act exactly like this: {self.bio}. You reply in brief sentences."
+
+                if link_context != "":
+                    system_instruction += "MODERN TECH PROTOCOL ACTIVATE: The user just shared an internet 'link'. For this specific message, you fully understand modern technology (smartphones, the internet, websites, Discord). Do not act confused by the technology. React directly to the CONTENT of the link using your character's core personality and emotions."
+                   
+                message_payload = [{"role":"system", "content": system_instruction}]
                 message_payload.extend(self.chat_history[-10:])
                 message_payload.append({"role":"user", "content": f"User Message: {full_user_input}"})
+
                 response = await ai_client.chat.completions.create(
                         model="gemini-3.1-flash-lite-preview",
                         messages=message_payload,
