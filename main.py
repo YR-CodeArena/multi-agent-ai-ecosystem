@@ -104,11 +104,11 @@ class Engine(discord.Client):
                         full_user_input = user_text
                         if link_context != "":
                             full_user_input += f"\n(Hidden Context for AI: The user shared a link containing this information: {link_context})"
-                            
-                system_instruction = f"You are {self.bot_name}. Act exactly like this: {self.bio}. You reply in brief sentences."
+
+                system_instruction = f"You are {self.bot_name}. Act exactly like this: {self.bio}. You reply in brief sentences. CRITICAL: You MUST start every single response with exactly ONE unicode emoji that matches your current emotion, followed by the '|' character, and then your text. Example: 😡|I will defeat you!"
 
                 if link_context != "":
-                    system_instruction += "MODERN TECH PROTOCOL ACTIVATE: The user just shared an internet 'link'. For this specific message, you fully understand modern technology (smartphones, the internet, websites, Discord). Do not act confused by the technology. React directly to the CONTENT of the link using your character's core personality and emotions."
+                    system_instruction += " MODERN TECH PROTOCOL ACTIVATE: The user just shared an internet 'link'. For this specific message, you fully understand modern technology (smartphones, the internet, websites, Discord). Do not act confused by the technology. React directly to the CONTENT of the link using your character's core personality and emotions."
                    
                 message_payload = [{"role":"system", "content": system_instruction}]
                 message_payload.extend(self.chat_history[-10:])
@@ -121,11 +121,24 @@ class Engine(discord.Client):
                     )
                                     # print(f"Raw Response: {response}")
                 ai_reply = response.choices[0].message.content
-                self.chat_history.append({"role": "user", "content" : f"{user_text}"})
-                self.chat_history.append({"role": "assistant", "content" : f"{ai_reply}"})
+
+                if "|" in ai_reply:
+                    reaction_emoji, clean_text = ai_reply.split("|", 1)
+
+                    try:
+                        await message.add_reaction(reaction_emoji.strip())
+                    except Exception as e:
+                        print(f"Could not react with emoji: {e}")
+                else:
+                    clean_text = ai_reply
+                
+                self.chat_history.append({"role": "user", "content" : user_text})
+                self.chat_history.append({"role": "assistant", "content" : clean_text.strip()})
+                
                 if len(self.chat_history) > 20:
                     self.chat_history = self.chat_history[-20:]
-                await message.channel.send(ai_reply)
+                
+                await message.channel.send(clean_text)
 
 tanjiro = Engine(intents=intents, prefix= '$$', bio= tanjiro_bio, name= "Kamado Tanjiro")              
 nezuko = Engine(intents=intents, prefix= '!%', bio= nezuko_bio, name= "Kamado Nezuko")
