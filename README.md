@@ -29,6 +29,8 @@ Powered by the Gemini API, the system features isolated memory management, dynam
 3. **LLM Payload Construction:** Constructs a JSON payload containing the agent's system prompt directives, recent memory state, and conditional tech protocols.
 4. **The Post-Processor:** Validates the API response, executes the output parsing logic for reactions, updates the isolated memory state, and dispatches the final response to the Discord channel.
 
+$$Tanjiro, !%Nezuko, %!Zenitsu, and #@Muzan to call the respective bots.
+
 ## 🔮 Future Scope
 
 * Migration from ephemeral RAM-based memory arrays to persistent database storage (PostgreSQL/MySQL) for long-term state retention across server restarts.
